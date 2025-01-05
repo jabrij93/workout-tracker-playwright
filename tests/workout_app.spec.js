@@ -12,7 +12,10 @@ describe('Workout Tracker app', () => {
   test('login form can be opened', async ({ page }) => {
     await page.goto('http://localhost:5173')
 
+    await page.getByRole('textbox').first().fill('mluukkai')
+    await page.getByRole('textbox').last().fill('salainen')
     await page.getByRole('button', { name: 'Login', exact: true }).click()
+    await expect(page.getByText('Matti Luukkainen')).toBeVisible()
   })
 })
 
