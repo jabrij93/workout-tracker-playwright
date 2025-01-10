@@ -20,15 +20,18 @@ describe('Workout Tracker app', () => {
 
     test('a new workout can be created', async ({ page }) => {
       await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click()
-      await page.getByTestId('workout').fill('pull-ups by playwright 6')
+      await page.getByTestId('workout').fill('pull-ups by playwright 15')
 
       // Wait for the network request to complete after clicking "Add Workout"
       await Promise.all([
-        page.waitForResponse(response => response.url().includes('/api/workouts') && response.status() === 200),
+        page.waitForResponse(response => {
+          console.log('Response received:', response.url(), response.status());
+          return response.url().includes('/api/workouts') && response.status() === 201}),
         page.getByRole('button', { name: 'Add Workout' }).click(),
       ]);
 
-      await expect(page.getByText('pull-ups by playwright 6')).toBeVisible()
+      await expect(page.getByText('pull-ups by playwright 15').first()).toBeVisible()
+
     })
   })  
 })
