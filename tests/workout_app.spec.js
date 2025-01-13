@@ -32,35 +32,41 @@ describe('Workout Tracker app', () => {
   })
 
   test('user can login', async ({ page }) => {
-    await page.goto('localhost:5173')
+    await page.goto('http://localhost:5173')
     await page.getByTestId('username').first().fill('mluukkai')
     await page.getByTestId('password').last().fill('salainen')
     await page.getByRole('button', { name: 'Login', exact: true }).click()
     await expect(page.getByText('Matti Luukkainen')).toBeVisible()
   })
 
-  // describe('when logged in', () => {
-  //   beforeEach(async ({ page }) => {
-  //     await page.goto('http://localhost:5173')
-  //     await page.getByTestId('username').first().fill('mluukkai')
-  //     await page.getByTestId('password').last().fill('salainen')
-  //     await page.getByRole('button', { name: 'Login', exact: true }).click()
-  //     await expect(page.getByText('Matti Luukkainen')).toBeVisible()
-  //   })
+  describe('when logged in', () => {
+    beforeEach(async ({ page }) => {
+      await page.goto('http://localhost:5173')
+      await page.getByTestId('username').first().fill('mluukkai')
+      await page.getByTestId('password').last().fill('salainen')
+      await page.getByRole('button', { name: 'Login', exact: true }).click()
+      await expect(page.getByText('Matti Luukkainen')).toBeVisible()
+    })
 
-  //   test('a new workout can be created', async ({ page }) => {
-  //     await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click()
-  //     await page.getByTestId('workout').fill('pull-ups by playwright 19')
+    describe('and a workout exists', () => {
+      beforeEach(async ({ page }) => {
+        await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click()
+        await page.getByTestId('workout').fill('pull-ups by playwright 6')
 
-  //     // Wait for the network request to complete after clicking "Add Workout"
-  //     await Promise.all([
-  //       page.waitForResponse(response => {
-  //         console.log('Response received:', response.url(), response.status());
-  //         return response.url().includes('/api/workouts') && response.status() === 201}),
-  //       page.getByRole('button', { name: 'Add Workout' }).click(),
-  //     ]);
-  //     await expect(page.getByText('pull-ups by playwright 19').first()).toBeVisible()
-  //   })
-  // }) 
+        // Wait for the network request to complete after clicking "Add Workout"
+        await Promise.all([
+          page.waitForResponse(response => {
+            console.log('Response received:', response.url(), response.status());
+            return response.url().includes('/api/workouts') && response.status() === 201
+          }),
+          page.getByRole('button', { name: 'Add Workout' }).click(),
+        ]);
+      })
+
+      test('and a workout exist', async ({ page }) => {
+        await expect(page.getByText('pull-ups by playwright 6').first()).toBeVisible()
+      })
+    })
+  }) 
 })
 
