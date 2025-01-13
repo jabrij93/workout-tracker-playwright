@@ -31,6 +31,14 @@ describe('Workout Tracker app', () => {
     await expect(page.getByText('This is not a real online service! You know you need something like this in your life to help you realize your deepest dreams.')).toBeVisible()
   })
 
+  test('user can login', async ({ page }) => {
+    await page.goto('localhost:5173')
+    await page.getByTestId('username').first().fill('mluukkai')
+    await page.getByTestId('password').last().fill('salainen')
+    await page.getByRole('button', { name: 'Login', exact: true }).click()
+    await expect(page.getByText('Matti Luukkainen')).toBeVisible()
+  })
+
   // describe('when logged in', () => {
   //   beforeEach(async ({ page }) => {
   //     await page.goto('http://localhost:5173')
