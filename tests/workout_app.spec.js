@@ -69,7 +69,7 @@ describe('Workout Tracker app', () => {
       })
 
       test('newly added workout details can be displayed', async ({ page }) => {
-        await page.getByRole('button', { name: 'show details' }).click()
+        await page.getByRole('button', { name: 'show details' }).first().click()
         await expect(page.getByText('11-07-2024')).toBeVisible()
       })
     })
