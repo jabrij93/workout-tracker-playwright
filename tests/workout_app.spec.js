@@ -51,7 +51,8 @@ describe('Workout Tracker app', () => {
     describe('and a workout exists', () => {
       beforeEach(async ({ page }) => {
         await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click()
-        await page.getByTestId('workout').fill('pull-ups by playwright 6')
+        await page.getByTestId('workout').fill('pull-ups by playwright with date')
+        await page.getByTestId('date').fill('11-07-2024')
 
         // Wait for the network request to complete after clicking "Add Workout"
         await Promise.all([
@@ -64,7 +65,12 @@ describe('Workout Tracker app', () => {
       })
 
       test('and a workout exist', async ({ page }) => {
-        await expect(page.getByText('pull-ups by playwright 6').first()).toBeVisible()
+        await expect(page.getByText('pull-ups by playwright with date').first()).toBeVisible()
+      })
+
+      test('newly added workout details can be displayed', async ({ page }) => {
+        await page.getByRole('button', { name: 'show details' }).click()
+        await expect(page.getByText('11-07-2024')).toBeVisible()
       })
     })
   }) 
