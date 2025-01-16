@@ -39,6 +39,16 @@ describe('Workout Tracker app', () => {
     await expect(page.getByText('Matti Luukkainen')).toBeVisible()
   })
 
+  test('login fails with wrong password', async ({ page }) => {
+    await page.goto('http://localhost:5173')
+    await page.getByRole('button', { name: 'log in' }).click()
+    await page.getByTestId('username').fill('mluukkai')
+    await page.getByTestId('password').fill('wrong')
+    await page.getByRole('button', { name: 'login' }).click()
+
+    await expect(page.getByText('wrong credentials')).toBeVisible()
+  })
+
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
       await page.goto('http://localhost:5173')
