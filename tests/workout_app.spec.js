@@ -41,12 +41,10 @@ describe('Workout Tracker app', () => {
 
   test('login fails with wrong password', async ({ page }) => {
     await page.goto('http://localhost:5173')
-    await page.getByRole('button', { name: 'log in' }).click()
-    await page.getByTestId('username').fill('mluukkai')
-    await page.getByTestId('password').fill('wrong')
-    await page.getByRole('button', { name: 'login' }).click()
-
-    await expect(page.getByText('wrong credentials')).toBeVisible()
+    await page.getByTestId('username').first().fill('mluukkai')
+    await page.getByTestId('password').last().fill('wrongpassword')
+    await page.getByRole('button', { name: 'Login', exact: true }).click()
+    await expect(page.getByText('Username or password is incorrect')).toBeVisible()
   })
 
   describe('when logged in', () => {
