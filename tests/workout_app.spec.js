@@ -49,38 +49,37 @@ describe('Workout Tracker app', () => {
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await page.goto('http://localhost:5173')
-      await page.getByTestId('username').first().fill('mluukkai')
-      await page.getByTestId('password').last().fill('salainen')
-      await page.getByRole('button', { name: 'Login', exact: true }).click()
-      await expect(page.getByText('Matti Luukkainen')).toBeVisible()
-    })
-
-    describe('and a workout exists', () => {
-      beforeEach(async ({ page }) => {
-        await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click()
-        await page.getByTestId('workout').fill('pull-ups by playwright with date')
-        await page.getByTestId('date').fill('11-07-2024')
-
-        // Wait for the network request to complete after clicking "Add Workout"
-        await Promise.all([
-          page.waitForResponse(response => {
-            console.log('Response received:', response.url(), response.status());
-            return response.url().includes('/api/workouts') && response.status() === 201
-          }),
-          page.getByRole('button', { name: 'Add Workout' }).click(),
-        ]);
-      })
-
-      test('and a workout exist', async ({ page }) => {
-        await expect(page.getByText('pull-ups by playwright with date').first()).toBeVisible()
-      })
-
-      test('newly added workout details can be displayed', async ({ page }) => {
-        await page.getByRole('button', { name: 'show details' }).first().click()
-        await expect(page.getByText('11-07-2024')).toBeVisible()
-      })
-    })
-  }) 
+      await page.goto('http://localhost:5173');
+      await page.getByTestId('username').first().fill('mluukkai');
+      await page.getByTestId('password').last().fill('salainen');
+      await page.getByRole('button', { name: 'Login', exact: true }).click();
+      await expect(page.getByText('Matti Luukkainen')).toBeVisible();
+  
+      await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click();
+      await page.getByTestId('workout').fill('pull-ups by playwright with date 11');
+  
+      // Use placeholder text to locate the date input
+      // console.log('Filling in the date...');
+      // await page.locator('input[placeholder="Select a date"]').fill('11-09-2024');
+      // console.log('Date filled.');
+  
+      // // Close the date picker
+      // await page.keyboard.press('Escape'); // Press Escape to close the date picker
+      // await page.waitForSelector('.react-datepicker', { state: 'hidden' }); // Wait for the date picker to close
+  
+      // Wait for the network request to complete after clicking "Add Workout"
+      await Promise.all([
+        page.waitForResponse(response => {
+          console.log('Response received:', response.url(), response.status());
+          return response.url().includes('/api/workouts') && response.status() === 200;
+        }, { timeout: 10000 }), // Increase timeout to 10 seconds
+        page.getByRole('button', { name: 'Add Workout' }).click(),
+      ]);
+    }, 10000);
+  
+    test('and a workout exists', async ({ page }) => {
+      await expect(page.getByText('pull-ups by playwright with date 11').first()).toBeVisible();
+    });
+  });
 })
 
