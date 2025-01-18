@@ -54,29 +54,35 @@ describe('Workout Tracker app', () => {
       await page.getByTestId('password').last().fill('salainen');
       await page.getByRole('button', { name: 'Login', exact: true }).click();
       await expect(page.getByText('Matti Luukkainen')).toBeVisible();
-  
+
       await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click();
       await page.getByTestId('workout').fill('pull-ups by playwright with date 11');
-  
+
       // Use placeholder text to locate the date input
-      // console.log('Filling in the date...');
-      // await page.locator('input[placeholder="Select a date"]').fill('11-09-2024');
-      // console.log('Date filled.');
-  
-      // // Close the date picker
-      // await page.keyboard.press('Escape'); // Press Escape to close the date picker
-      // await page.waitForSelector('.react-datepicker', { state: 'hidden' }); // Wait for the date picker to close
-  
+      console.log('Filling in the date...');
+      const dateInput = page.locator('input[placeholder="Select a date"]');
+      await dateInput.fill('11-09-2024'); // Fill the date input
+      console.log('Date filled.');
+
+      // Close the date picker (if it opens)
+      await page.keyboard.press('Escape'); // Press Escape to close the date picker
+      await page.waitForSelector('.react-datepicker', { state: 'hidden' }); // Wait for the date picker to close
+
+      // Ensure the "Add Workout" button is visible and enabled
+      const addWorkoutButton = page.getByRole('button', { name: 'Add Workout' });
+      await expect(addWorkoutButton).toBeVisible({ timeout: 10000 }); // Increase timeout to 10 seconds
+      await expect(addWorkoutButton).toBeEnabled();
+
       // Wait for the network request to complete after clicking "Add Workout"
       await Promise.all([
-        page.waitForResponse(response => {
+        page.waitForResponse((response) => {
           console.log('Response received:', response.url(), response.status());
           return response.url().includes('/api/workouts') && response.status() === 200;
         }, { timeout: 10000 }), // Increase timeout to 10 seconds
-        page.getByRole('button', { name: 'Add Workout' }).click(),
+        addWorkoutButton.click(),
       ]);
     }, 10000);
-  
+
     test('and a workout exists', async ({ page }) => {
       await expect(page.getByText('pull-ups by playwright with date 11').first()).toBeVisible();
     });
