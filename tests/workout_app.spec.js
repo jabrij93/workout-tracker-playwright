@@ -32,16 +32,13 @@ describe('Workout Tracker app', () => {
     await expect(page.getByText('This is not a real online service! You know you need something like this in your life to help you realize your deepest dreams.')).toBeVisible()
   })
 
-  test.only('user can login', async ({ page }) => {
+  test('user can login', async ({ page }) => {
     await loginWith(page, 'mluukkai', 'salainen')
     await expect(page.getByText('Matti Luukkainen')).toBeVisible()
   })
 
-  test('login fails with wrong password', async ({ page }) => {
-    await page.goto('http://localhost:5173')
-    await page.getByTestId('username').first().fill('mluukkai')
-    await page.getByTestId('password').last().fill('wrongpassword')
-    await page.getByRole('button', { name: 'Login', exact: true }).click()
+  test.only('login fails with wrong password', async ({ page }) => {
+    await loginWith(page, 'mluukkai', 'salainen2')
     await expect(page.getByText('Username or password is incorrect')).toBeVisible()
   })
 
