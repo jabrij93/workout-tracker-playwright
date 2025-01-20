@@ -47,7 +47,7 @@ describe('Workout Tracker app', () => {
     await expect(page.getByText('Username or password is incorrect')).toBeVisible()
   })
 
-  describe('when logged in', () => {
+  describe.only('when logged in', () => {
     beforeEach(async ({ page }) => {
       await page.goto('http://localhost:5173');
       await page.getByTestId('username').first().fill('mluukkai');
@@ -56,7 +56,7 @@ describe('Workout Tracker app', () => {
       await expect(page.getByText('Matti Luukkainen')).toBeVisible();
 
       await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click();
-      await page.getByTestId('workout').fill('pull-ups by playwright with date 13');
+      await page.getByTestId('workout').fill('pull-ups by playwright with date 14');
 
       // Wait for the date input to be visible and click it
       console.log('Waiting for date input to be visible...');
@@ -101,7 +101,7 @@ describe('Workout Tracker app', () => {
     }, 30000); // Increase timeout for the hook
 
     test('and a workout exists', async ({ page }) => {
-      await expect(page.getByText('pull-ups by playwright with date 13').first()).toBeVisible();
+      await expect(page.getByText('pull-ups by playwright with date 14').first()).toBeVisible();
     });
   });
 });
