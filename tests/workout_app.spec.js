@@ -47,7 +47,7 @@ describe('Workout Tracker app', () => {
     await expect(page.getByText('Username or password is incorrect')).toBeVisible()
   })
 
-  describe('when logged in', () => {
+  describe.only('when logged in', () => {
     beforeEach(async ({ page }) => {
       await page.goto('http://localhost:5173');
       await page.getByTestId('username').first().fill('mluukkai');
@@ -56,22 +56,39 @@ describe('Workout Tracker app', () => {
       await expect(page.getByText('Matti Luukkainen')).toBeVisible();
 
       await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click();
-      await page.getByTestId('workout').fill('pull-ups by playwright with date 12');
+      await page.getByTestId('workout').fill('pull-ups by playwright with date 14');
 
-      // Use placeholder text to locate the date input
-      // console.log('Filling in the date...');
-      // const dateInput = page.locator('input[placeholder="Select a date"]');
-      // await dateInput.fill('11-09-2024'); // Fill the date input
-      // console.log('Date filled.');
+      // Wait for the date input to be visible and click it
+      console.log('Waiting for date input to be visible...');
+      const dateInput = page.getByTestId('date');
+      await dateInput.waitFor({ state: 'visible', timeout: 10000 }); // Wait for the input to be visible
+      console.log('Date input is visible. Clicking it...');
+      await dateInput.click();
 
-      // Close the date picker (if it opens)
-      await page.keyboard.press('Escape'); // Press Escape to close the date picker
-      await page.waitForSelector('.react-datepicker', { state: 'hidden' }); // Wait for the date picker to close
+      // Navigate to the desired month (January 2025)
+      const currentMonthYear = await page.locator('.react-datepicker__current-month').innerText();
+      const [currentMonth, currentYear] = currentMonthYear.split(' ');
 
-      // Ensure the "Add Workout" button is visible and enabled
-      const addWorkoutButton = page.getByRole('button', { name: 'Add Workout' })
-      // await expect(addWorkoutButton).toBeVisible({ timeout: 10000 }); // Increase timeout to 10 seconds
-      // await expect(addWorkoutButton).toBeEnabled();
+      const targetMonth = 'January';
+      const targetYear = '2025';
+      let clicksNeeded = 0;
+
+      if (currentYear < targetYear || (currentYear === targetYear && currentMonth !== targetMonth)) {
+        const months = [
+          'January', 'February', 'March', 'April', 'May', 'June',
+          'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        const currentMonthIndex = months.indexOf(currentMonth);
+        const targetMonthIndex = months.indexOf(targetMonth);
+        clicksNeeded = (targetYear - currentYear) * 12 + (targetMonthIndex - currentMonthIndex);
+      }
+
+      for (let i = 0; i < clicksNeeded; i++) {
+        await page.locator('.react-datepicker__navigation--next').click();
+      }
+
+      // Select the 19th day of January 2025
+      await page.locator('.react-datepicker__day--019').click();
 
       // Wait for the network request to complete after clicking "Add Workout"
       await Promise.all([
@@ -84,8 +101,11 @@ describe('Workout Tracker app', () => {
     }, 10000);
 
     test('and a workout exists', async ({ page }) => {
-      await expect(page.getByText('pull-ups by playwright with date 12').first()).toBeVisible();
+      await expect(page.getByText('pull-ups by playwright with date 14').first()).toBeVisible();
+    });
+
+    test('workout details can be displayed more', async ({ page }) => {
+      await page.getByRole('button', { name: 'show details', exact: true }).nth(0).click();
     });
   });
-})
-
+});
