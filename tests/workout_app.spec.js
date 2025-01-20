@@ -103,5 +103,9 @@ describe('Workout Tracker app', () => {
     test('and a workout exists', async ({ page }) => {
       await expect(page.getByText('pull-ups by playwright with date 14').first()).toBeVisible();
     });
+
+    test('workout details can be displayed more', async ({ page }) => {
+      await page.getByRole('button', { name: 'show details', exact: true }).nth(0).click();
+    });
   });
 });
