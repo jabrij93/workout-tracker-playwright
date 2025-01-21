@@ -44,10 +44,7 @@ describe('Workout Tracker app', () => {
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await page.goto('http://localhost:5173');
-      await page.getByTestId('username').first().fill('mluukkai');
-      await page.getByTestId('password').last().fill('salainen');
-      await page.getByRole('button', { name: 'Login', exact: true }).click();
+      await loginWith(page, 'mluukkai', 'salainen2')
       await expect(page.getByText('Matti Luukkainen')).toBeVisible();
 
       await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click();
