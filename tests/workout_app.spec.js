@@ -21,11 +21,11 @@ describe('Workout Tracker app', () => {
       }
     });
 
-    await page.goto('http://localhost:5173')
+    await page.goto('/')
   })
 
   test('front page can be opened', async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('/')
   
     const locator = await page.getByText('Let\'s do this')
     await expect(locator).toBeVisible()
