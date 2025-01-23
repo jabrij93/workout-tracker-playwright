@@ -3,9 +3,11 @@ const { loginWith, createWorkout } = require('./helper')
 
 describe('Workout Tracker app', () => {
   beforeEach(async ({ page, request }) => {
-    await request.post('http://localhost:3002/api/testing/reset')
+    const backendBaseURL = 'http://localhost:3002'
 
-    await request.post('http://localhost:3002/api/users', {
+    await request.post(`${backendBaseURL}/api/testing/reset`)
+
+    await request.post(`${backendBaseURL}/api/users`, {
       data: {
         name: 'Matti Luukkainen',
         username: 'mluukkai',
@@ -13,7 +15,7 @@ describe('Workout Tracker app', () => {
       }
     });
 
-    await request.post('http://localhost:3002/api/users', {
+    await request.post(`${backendBaseURL}/api/users`, {
       data: {
         name: 'Superuser',
         username: 'root',
