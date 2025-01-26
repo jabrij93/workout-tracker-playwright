@@ -8,6 +8,7 @@ const loginWith = async (page, username, password)  => {
 const createWorkout = async (page, workout, date = null) => {
     await page.getByRole('button', { name: 'NEW +', exact: true }).nth(1).click();
     await page.getByTestId('workout').fill(workout);
+    await page.getByText(workout).waitFor()
   
     if (date) {
       // Wait for the date input to be visible and click it
