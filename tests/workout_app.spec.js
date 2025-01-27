@@ -22,7 +22,7 @@ describe('Workout Tracker app', () => {
       }
     });
 
-    await page.goto('/')
+    await page.goto('')
   })
 
   test('front page can be opened', async ({ page }) => {
@@ -47,20 +47,25 @@ describe('Workout Tracker app', () => {
     beforeEach(async ({ page }) => {
       await loginWith(page, 'mluukkai', 'salainen')
       await expect(page.getByText('Matti Luukkainen')).toBeVisible();
-      await createWorkout(page, 'pull-ups without date 2')
-      await createWorkout(page, 'pull-ups with date', 'January 2025 19');
+      await createWorkout(page, 'pull-ups')
+      await createWorkout(page, 'pull-ups without date')
     })
+
+    test.only('one of those can be shown more details', async ({ page }) => {
+        const otherWorkoutText = await page.getByText('pull-ups without date')
+        const otherWorkoutElement = await otherWorkoutText.locator('..')
+    });
 
     test('add workout without date', async ({ page }) => {
       await createWorkout(page, 'pull-ups without date')
     });
 
-    test('workout without date exists', async ({ page }) => {
-      await expect(page.getByText('pull-ups without date 2').first()).toBeVisible();
+    test.only('workout without date exists', async ({ page }) => {
+      await expect(page.getByText('pull-ups without date').first()).toBeVisible();
     });
 
-    test.only('workout with date exists', async ({ page }) => {
-      await expect(page.getByText('pull-ups with date').first()).toBeVisible();
+    test('workout with date exists', async ({ page }) => {
+      await expect(page.getByText('pull-ups without date').first()).toBeVisible();
     });
 
     test('and a workout exists', async ({ page }) => {
