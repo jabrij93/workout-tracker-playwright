@@ -47,13 +47,15 @@ describe('Workout Tracker app', () => {
     beforeEach(async ({ page }) => {
       await loginWith(page, 'mluukkai', 'salainen')
       await expect(page.getByText('Matti Luukkainen')).toBeVisible();
-      await createWorkout(page, 'pull-ups')
+      await createWorkout(page, 'pull-ups', '13-12-2024')
       await createWorkout(page, 'pull-ups without date')
     })
 
     test.only('one of those can be shown more details', async ({ page }) => {
-        const otherWorkoutText = await page.getByText('pull-ups without date')
+        const otherWorkoutText = await page.getByText('pull-ups')
         const otherWorkoutElement = await otherWorkoutText.locator('..')
+        await otherWorkoutElement.getByRole('button', { name: 'show details' }).click()
+        await expect(otherNoteElement.getByText('13-12-2024')).toBeVisible()
     });
 
     test('add workout without date', async ({ page }) => {
