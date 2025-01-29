@@ -41,6 +41,8 @@ const createWorkout = async (page, workout, date = null) => {
       // Select the target day
       await page.locator(`.react-datepicker__day--0${targetDay}`).click();
     }
+
+    await page.getByText(workout).waitFor()
   
     // Wait for the network request to complete after clicking "Add Workout"
     const addWorkoutButton = page.getByRole('button', { name: 'Add Workout' });

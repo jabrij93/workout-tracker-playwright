@@ -49,6 +49,7 @@ describe('Workout Tracker app', () => {
       await expect(page.getByText('Matti Luukkainen')).toBeVisible();
       await createWorkout(page, 'pull-ups without date 2')
       await createWorkout(page, 'pull-ups with date', 'January 2025 19');
+      await createWorkout(page, 'pull-ups 3')
     })
 
     test('add workout without date', async ({ page }) => {
@@ -60,7 +61,9 @@ describe('Workout Tracker app', () => {
     });
 
     test.only('workout with date exists', async ({ page }) => {
+      await expect(page.getByText('pull-ups without date 2').first()).toBeVisible();
       await expect(page.getByText('pull-ups with date').first()).toBeVisible();
+      await expect(page.getByText('pull-ups 3').first()).toBeVisible();
     });
 
     test('and a workout exists', async ({ page }) => {
@@ -69,6 +72,7 @@ describe('Workout Tracker app', () => {
 
     test('workout details can be displayed more', async ({ page }) => {
       await page.getByRole('button', { name: 'show details', exact: true }).nth(0).click();
+      await page.getByRole('button', { name: '✖', exact: true }).nth(0).click();
     });
   });
 });
