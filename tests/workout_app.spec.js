@@ -47,9 +47,31 @@ describe('Workout Tracker app', () => {
     beforeEach(async ({ page }) => {
       await loginWith(page, 'mluukkai', 'salainen')
       await expect(page.getByText('Matti Luukkainen')).toBeVisible();
-      await createWorkout(page, 'pull-ups without date 2')
-      await createWorkout(page, 'pull-ups with date', 'January 2025 19');
-      await createWorkout(page, 'pull-ups 3')
+    })
+
+    describe('several workouts exist', ()=> {
+      beforeEach(async({ page }) => {
+        await createWorkout(page, 'pull-up 1')
+        await createWorkout(page, 'pull-up 2')
+        await createWorkout(page, 'pull-up 3')
+      })
+
+      test.only('show details button can be clicked', async ({ page }) => {
+        // Find the parent container using test ID
+        const workoutCard = page.getByTestId('workout-card', { hasText: 'pull-up 3' });
+        
+        // Find button within the parent container
+        await workoutCard.getByRole('button', { name: 'show details' }).click();
+        
+        // Verify details
+        await expect(workoutCard.getByText('31-01-2025')).toBeVisible();
+      })
+
+      test.only('3 workouts exists', async ({ page }) => {
+        await expect(page.getByTestId('workout-card', { hasText: 'pull-up 1' }));
+        await expect(page.getByTestId('workout-card', { hasText: 'pull-up 2' }));
+        await expect(page.getByTestId('workout-card', { hasText: 'pull-up 3' }));
+      })
     })
 
     test('add workout without date', async ({ page }) => {
@@ -60,7 +82,7 @@ describe('Workout Tracker app', () => {
       await expect(page.getByText('pull-ups without date 2').first()).toBeVisible();
     });
 
-    test.only('workout with date exists', async ({ page }) => {
+    test('workout with date exists', async ({ page }) => {
       await expect(page.getByText('pull-ups without date 2').first()).toBeVisible();
       await expect(page.getByText('pull-ups with date').first()).toBeVisible();
       await expect(page.getByText('pull-ups 3').first()).toBeVisible();
