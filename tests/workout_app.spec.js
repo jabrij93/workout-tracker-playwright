@@ -64,14 +64,14 @@ describe('Workout Tracker app', () => {
         await workoutCard.getByRole('button', { name: 'show details' }).click();
         
         // Verify details
-        await expect(workoutCard.getByText('31-01-2025')).toBeVisible();
+        await expect(workoutCard.getByText('01-02-2025')).toBeVisible();
       })
 
       test.only('3 workouts exists', async ({ page }) => {
-        await expect(page.getByTestId('workout-card', { hasText: 'pull-up 1' }));
-        await expect(page.getByTestId('workout-card', { hasText: 'pull-up 2' }));
-        await expect(page.getByTestId('workout-card', { hasText: 'pull-up 3' }));
-      })
+          await expect(page.getByText('pull-up 1')).toBeVisible();
+          await expect(page.getByText('pull-up 2')).toBeVisible();
+          await expect(page.getByText('pull-up 3')).toBeVisible();
+      });
     })
 
     test('add workout without date', async ({ page }) => {
