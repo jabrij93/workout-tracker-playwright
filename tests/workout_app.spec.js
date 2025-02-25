@@ -57,13 +57,8 @@ describe('Workout Tracker app', () => {
       })
 
       test.only('show details button can be clicked', async ({ page }) => {
-        // Find the parent container using test ID
         const workoutCard = page.getByTestId('workout-card', { hasText: 'pull-up 3' });
-        
-        // Find button within the parent container
         await workoutCard.getByRole('button', { name: 'show details' }).click();
-        
-        // Verify details
         await expect(workoutCard.getByText('01-02-2025')).toBeVisible();
       })
 
