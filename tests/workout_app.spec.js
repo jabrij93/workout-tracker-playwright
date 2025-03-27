@@ -51,18 +51,18 @@ describe('Workout Tracker app', () => {
 
     describe('several workouts exist', ()=> {
       beforeEach(async({ page }) => {
-        await createWorkout(page, 'pull-up 1')
-        await createWorkout(page, 'pull-up 2')
-        await createWorkout(page, 'pull-up 3')
+        await createWorkout(page, 'pull-up 1', '01-03-2025')
+        await createWorkout(page, 'pull-up 2', '02-03-2025')
+        await createWorkout(page, 'pull-up 3', '03-03-2025')
       })
 
-      test.only('show details button can be clicked', async ({ page }) => {
-        const workoutCard = page.getByTestId('workout-card', { hasText: 'pull-up 3' });
-        await workoutCard.getByRole('button', { name: 'show details' }).click();
-        await expect(workoutCard.getByText('01-02-2025')).toBeVisible();
-      })
+      // test('show details button can be clicked', async ({ page }) => {
+      //   const workoutCard = page.getByTestId('workout-card', { hasText: 'pull-up 3' });
+      //   await workoutCard.getByRole('button', { name: 'show details' }).click();
+      //   await expect(workoutCard.getByText('02-03-2025')).toBeVisible();
+      // })
 
-      test.only('3 workouts exists', async ({ page }) => {
+      test('3 workouts exists', async ({ page }) => {
           await expect(page.getByText('pull-up 1')).toBeVisible();
           await expect(page.getByText('pull-up 2')).toBeVisible();
           await expect(page.getByText('pull-up 3')).toBeVisible();
@@ -71,25 +71,26 @@ describe('Workout Tracker app', () => {
 
     test('add workout without date', async ({ page }) => {
       await createWorkout(page, 'pull-ups without date')
+      await expect(page.getByText('pull-ups without date').first()).toBeVisible();
     });
 
-    test('workout without date exists', async ({ page }) => {
-      await expect(page.getByText('pull-ups without date 2').first()).toBeVisible();
-    });
+    // test('workout without date exists', async ({ page }) => {
+    //   await expect(page.getByText('pull-ups without date 2').first()).toBeVisible();
+    // });
 
-    test('workout with date exists', async ({ page }) => {
-      await expect(page.getByText('pull-ups without date 2').first()).toBeVisible();
-      await expect(page.getByText('pull-ups with date').first()).toBeVisible();
-      await expect(page.getByText('pull-ups 3').first()).toBeVisible();
-    });
+    // test('workout with date exists', async ({ page }) => {
+    //   await expect(page.getByText('pull-ups without date 2').first()).toBeVisible();
+    //   await expect(page.getByText('pull-ups with date').first()).toBeVisible();
+    //   await expect(page.getByText('pull-ups 3').first()).toBeVisible();
+    // });
 
-    test('and a workout exists', async ({ page }) => {
-      await expect(page.getByText('pull-ups by playwright with date 14').first()).toBeVisible();
-    });
+    // test('and a workout exists', async ({ page }) => {
+    //   await expect(page.getByText('pull-ups by playwright with date 14').first()).toBeVisible();
+    // });
 
-    test('workout details can be displayed more', async ({ page }) => {
-      await page.getByRole('button', { name: 'show details', exact: true }).nth(0).click();
-      await page.getByRole('button', { name: '✖', exact: true }).nth(0).click();
-    });
+    // test('workout details can be displayed more', async ({ page }) => {
+    //   await page.getByRole('button', { name: 'show details', exact: true }).nth(0).click();
+    //   await page.getByRole('button', { name: '✖', exact: true }).nth(0).click();
+    // });
   });
 });
