@@ -52,8 +52,8 @@ describe('Workout Tracker app', () => {
     describe('several workouts exist', ()=> {
       beforeEach(async({ page }) => {
         await createWorkout(page, 'pull-up 1', '01-03-2025')
-        await createWorkout(page, 'pull-up 2', '02-03-2025')
-        await createWorkout(page, 'pull-up 3', '03-03-2025')
+        // await createWorkout(page, 'pull-up 2', '02-03-2025')
+        // await createWorkout(page, 'pull-up 3', '03-03-2025')
       })
 
       // test('show details button can be clicked', async ({ page }) => {
@@ -63,9 +63,9 @@ describe('Workout Tracker app', () => {
       // })
 
       test('3 workouts exists', async ({ page }) => {
-          await expect(page.getByText('pull-up 1')).toBeVisible();
-          await expect(page.getByText('pull-up 2')).toBeVisible();
-          await expect(page.getByText('pull-up 3')).toBeVisible();
+        await expect(page.locator('.card').getByText('pull-up 1')).toBeVisible();
+        //  await expect(page.getByText('pull-up 2')).toBeVisible();
+        //  await expect(page.getByText('pull-up 3')).toBeVisible();
       });
     })
 

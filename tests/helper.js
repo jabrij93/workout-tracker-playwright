@@ -12,8 +12,11 @@ const formatMonth = (month) => {
 
 const createWorkout = async (page, workout, date) => {
   await page
-    .locator('div.header-two') 
-    .locator('div.header')     
+    .locator('div.dashboard-header')
+    .getByRole('button', { name: '✖', exact: true })
+    .click();
+  await page
+    .locator('div.first-header') 
     .getByRole('button', { name: 'NEW +', exact: true })
     .click();
   await page.getByTestId('workout').fill(workout)
@@ -40,7 +43,7 @@ const createWorkout = async (page, workout, date) => {
   // const datePicker = await page.locator('input.react-datepicker-ignore-onclickoutside') 
   // await datePicker.fill(date) // Format: "YYYY-MM-DD"
 
-  await page.getByRole('button', { name: 'save' }).click()
+  await page.getByRole('button', { name: 'Add Workout' }).click()
   await page.getByText(workout).waitFor()
 }
   
