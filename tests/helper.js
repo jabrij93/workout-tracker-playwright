@@ -5,15 +5,43 @@ const loginWith = async (page, username, password)  => {
     await page.getByRole('button', { name: 'Login', exact: true }).click()
 }
 
-const createWorkout = async (page, workout) => {
+const formatMonth = (month) => {
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  return months[parseInt(month) - 1];
+};
+
+const createWorkout = async (page, workout, date) => {
   await page
-    .locator('div.header-two') // Parent container
-    .locator('div.header')     // Child container
+    .locator('div.header-two') 
+    .locator('div.header')     
     .getByRole('button', { name: 'NEW +', exact: true })
     .click();
   await page.getByTestId('workout').fill(workout)
-  await page.getByRole('button', { name: 'Add Workout' }).click()
-  await page.getByTestId('workout-card', { hasText: workout }).waitFor();
+  // Extract year, month, day from date
+  const [day, month, year] = date.split('-');
+  
+  await page.click('div.react-datepicker__input-container') // Open the calendar
+
+  while (true) {
+    const currentText = await page.locator('h2.react-datepicker__current-month').textContent()
+    const [currentMonth, currentYear] = currentText.split(' ');
+
+    if (parseInt(currentYear) === parseInt(year) && currentMonth === formatMonth(month)) {
+      break;
+    }
+
+    await page.click('button[aria-label="Next Month"]');
+  }
+   // Select the correct day
+   await page.click(`.react-datepicker__day--0${day}`);
+   console.log('YearMonthDay:', year, month, day)
+
+  // Select the date using the date picker
+  // const datePicker = await page.locator('input.react-datepicker-ignore-onclickoutside') 
+  // await datePicker.fill(date) // Format: "YYYY-MM-DD"
+
+  await page.getByRole('button', { name: 'save' }).click()
+  await page.getByText(workout).waitFor()
 }
   
 export { loginWith, createWorkout };
