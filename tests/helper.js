@@ -6,45 +6,81 @@ const loginWith = async (page, username, password)  => {
 }
 
 const formatMonth = (month) => {
-  const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const months = ["January", "February", "March", "April", "May", "June", "July", "August", 
+    "September", "October", "November", "December"];
   return months[parseInt(month) - 1];
 };
 
 const createWorkout = async (page, workout, date) => {
-  await page
-    .locator('div.dashboard-header')
-    .getByRole('button', { name: '✖', exact: true })
-    .click();
-  await page
-    .locator('div.first-header') 
-    .getByRole('button', { name: 'NEW +', exact: true })
-    .click();
-  await page.getByTestId('workout').fill(workout)
-  // Extract year, month, day from date
+  // Open the form by clicking "NEW +"
+  const newButton = page.locator('div.header').getByRole('button', { name: 'NEW +', exact: true });
+  await newButton.click();
+
+  // Fill in workout details
+  await page.getByTestId('workout').fill(workout);
+
+  // Extract date components
   const [day, month, year] = date.split('-');
   
-  await page.click('div.react-datepicker__input-container') // Open the calendar
+  // Open the date picker
+  await page.click('div.react-datepicker__input-container');
 
+  // Navigate to the correct month and year
   while (true) {
-    const currentText = await page.locator('h2.react-datepicker__current-month').textContent()
-    const [currentMonth, currentYear] = currentText.split(' ');
+    const currentMonthText = await page.locator('h2.react-datepicker__current-month').textContent();
+    const [currentMonth, currentYear] = currentMonthText.split(' ');
 
     if (parseInt(currentYear) === parseInt(year) && currentMonth === formatMonth(month)) {
       break;
     }
-
     await page.click('button[aria-label="Next Month"]');
   }
-   // Select the correct day
-   await page.click(`.react-datepicker__day--0${day}`);
-   console.log('YearMonthDay:', year, month, day)
 
-  // Select the date using the date picker
-  // const datePicker = await page.locator('input.react-datepicker-ignore-onclickoutside') 
-  // await datePicker.fill(date) // Format: "YYYY-MM-DD"
+  // Select the day
+  await page.click(`.react-datepicker__day--0${day}`);
 
-  await page.getByRole('button', { name: 'Add Workout' }).click()
-  await page.getByText(workout).waitFor()
-}
+  // Submit the form
+  await page.getByRole('button', { name: 'Add Workout' }).click();
+
+  // Wait for confirmation that the workout was added
+  await page.getByText(workout).waitFor();
+};
+
+// const createWorkout = async (page, workout, date) => {
+//   await page
+//     .locator('div.dashboard-header')
+//     .getByRole('button', { name: '✖', exact: true })
+//     .click();
+//   await page
+//     .locator('div.first-header') 
+//     .getByRole('button', { name: 'NEW +', exact: true })
+//     .click();
+//   await page.getByTestId('workout').fill(workout)
+//   // Extract year, month, day from date
+//   const [day, month, year] = date.split('-');
+  
+//   await page.click('div.react-datepicker__input-container') // Open the calendar
+
+//   while (true) {
+//     const currentText = await page.locator('h2.react-datepicker__current-month').textContent()
+//     const [currentMonth, currentYear] = currentText.split(' ');
+
+//     if (parseInt(currentYear) === parseInt(year) && currentMonth === formatMonth(month)) {
+//       break;
+//     }
+
+//     await page.click('button[aria-label="Next Month"]');
+//   }
+//    // Select the correct day
+//    await page.click(`.react-datepicker__day--0${day}`);
+//    console.log('YearMonthDay:', year, month, day)
+
+//   // Select the date using the date picker
+//   // const datePicker = await page.locator('input.react-datepicker-ignore-onclickoutside') 
+//   // await datePicker.fill(date) // Format: "YYYY-MM-DD"
+
+//   await page.getByRole('button', { name: 'Add Workout' }).click()
+//   await page.getByText(workout).waitFor()
+// }
   
 export { loginWith, createWorkout };
