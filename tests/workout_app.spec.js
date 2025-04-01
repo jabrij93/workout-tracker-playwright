@@ -48,15 +48,15 @@ describe('Workout Tracker app', () => {
     })
 
     test('a new workout can be created', async ({ page }) => {
-      await createWorkout(page, 'a workout created by playwright', '01-04-2025')
+      await createWorkout(page, 'a workout created by playwright', '02-03-2025')
       await expect(page.getByText('a workout created by playwright')).toBeVisible()
     })
 
     describe('and a workout exists', () => {
       beforeEach(async ({ page }) => {
-        await createWorkout(page, 'first workout', '01-04-2025')
-        await createWorkout(page, 'second workout', '02-04-2025')
-        await createWorkout(page, 'third workout', '03-04-2025')
+        await createWorkout(page, 'first workout', '01-03-2025')
+        await createWorkout(page, 'second workout', '02-03-2025')
+        await createWorkout(page, 'third workout', '03-03-2025')
       })
   
       test('workout exist', async ({ page }) => {
