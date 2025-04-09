@@ -78,6 +78,15 @@ describe('Workout Tracker app', () => {
         await expect(card.getByText('Detail : dips')).toBeVisible();
       });
       
+      test('workout can be liked', async ({ page }) => {
+        const card = page.getByTestId('workout-card-third workout');
+      
+        // Click the "See more" button inside the card
+        await card.getByRole('button', { name: 'See more' }).click();
+      
+        await card.getByRole('button', { name: 'Like' }).click();
+        await expect(page.getByText('Liked third workout !')).toBeVisible();
+      });
 
       // test('see more button can be clicked', async ({ page }) => {
       //   const workoutList = await page.locator('div.title', { hasText: 'second workout' });
