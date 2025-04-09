@@ -13,7 +13,7 @@ const monthToNumber = {
 
 const formatMonth = (monthStr) => monthToNumber[monthStr]; 
 
-const createWorkout = async (page, workout, date) => {
+const createWorkout = async (page, workout, date, detail) => {
   // Open the form by clicking "NEW +"
   const newButton = page.locator('div.header').getByRole('button', { name: 'NEW +', exact: true });
   await newButton.click();
@@ -51,6 +51,8 @@ const createWorkout = async (page, workout, date) => {
   // Select the correct day
   await page.click(`.react-datepicker__day--0${day}`);
   console.log('YearMonthDay:', year, month, day);
+
+  await page.getByTestId('detail').fill(detail);
 
   // Submit the form
   await page.getByRole('button', { name: 'Add Workout' }).click();
