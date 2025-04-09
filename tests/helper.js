@@ -56,7 +56,11 @@ const createWorkout = async (page, workout, date) => {
   await page.getByRole('button', { name: 'Add Workout' }).click();
 
   // Wait for confirmation that the workout was added
-  await page.getByText(workout).waitFor();
+  await page.getByTestId(`workout-card-${workout}`).locator('.main-workout').waitFor();
+
+  // Below code is the old code. It's not working because the 'workout' also exist in other elements. So there's conflict.
+  // The above code targeted to the specific element and it works.
+  // await page.getByText(workout).waitFor();
 };
 
 // const createWorkout = async (page, workout, date) => {
