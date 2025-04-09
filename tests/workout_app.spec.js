@@ -49,7 +49,10 @@ describe('Workout Tracker app', () => {
 
     test('a new workout can be created', async ({ page }) => {
       await createWorkout(page, 'a workout created by playwright', '02-03-2025')
-      await expect(page.getByText('a workout created by playwright')).toBeVisible()
+      await expect(
+        page.getByTestId('workout-card-a workout created by playwright')
+        .locator('.main-workout'))
+        .toHaveText('a workout created by playwright, 02-03-2025');
     })
 
     describe('and a workout exists', () => {
@@ -61,12 +64,25 @@ describe('Workout Tracker app', () => {
   
       test('workout exist', async ({ page }) => {
         await page.pause()
-        const otherNoteText = await page.getByText('third workout')
-        const otherNoteElement = await otherNoteText.locator('..')
+        const card = page.getByTestId('workout-card-third workout')
+        await expect(card).toBeVisible()
+        
+        // const otherNoteText = await page.getByText('third workout')
+        // const otherNoteElement = await otherNoteText.locator('..')
       
         // await otherNoteElement.getByRole('button', { name: 'make not important' }).click()
-        await expect(otherNoteElement).toBeVisible()
+        // await expect(otherNoteElement).toBeVisible()
       })
+
+      // test('see more button can be clicked', async ({ page }) => {
+      //   const workoutList = await page.locator('div.title', { hasText: 'second workout' });
+
+      //   // Within that blog container, find and click the "show" button
+      //   const showButton = workoutList.getByRole('button', { name: 'See more' });
+      //   await showButton.click();
+
+      //   await expect(page.getByText('Detail : dips')).toBeVisible();
+      // })
     })
   });
 });
