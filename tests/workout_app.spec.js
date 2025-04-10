@@ -88,6 +88,23 @@ describe('Workout Tracker app', () => {
         await expect(page.getByText('Liked third workout !')).toBeVisible();
       });
 
+      test('workout can be deleted', async ({ page }) => {
+        const card = page.getByTestId('workout-card-third workout');
+
+        // Listen for the dialog and accept it
+        page.once('dialog', async dialog => {
+          expect(dialog.message()).toBe('Are you sure you want to delete this workout?');
+          await dialog.accept();
+        });
+      
+        // Click the "See more" button inside the card
+        await card.getByRole('button', { name: 'See more' }).click();
+      
+        await card.getByRole('button', { name: 'Delete' }).click(); 
+        await expect(page.getByText('Deleted workout!')).toBeVisible();
+        await expect(card.getByText('third workout, 03-03-2025')).not.toBeVisible();
+      });
+
       // test('see more button can be clicked', async ({ page }) => {
       //   const workoutList = await page.locator('div.title', { hasText: 'second workout' });
 
